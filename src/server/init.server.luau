@@ -1,23 +1,16 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
-
-local SolarisCore = require(Shared:WaitForChild("SolarisCore"))
 local Network = require(Shared:WaitForChild("Network"))
+local SolarisCore = require(Shared:WaitForChild("SolarisCore"))
 
--- Setup Network Listener
+-- Listener for client requests
 Network.GetRemote("RequestAbility").OnServerEvent:Connect(function(player: Player, abilityName: string)
-    -- Complex logic here: Check if player is stunned, on cooldown, etc.
-    print(player.Name .. " is attempting to use " .. abilityName)
+    local character = player.Character
+    if not character then return end
+    
+    -- Execute ability logic
     SolarisCore.Execute(abilityName, player)
+    
+    -- Tell ALL clients to play the VFX at the player's position
+    Network.GetRemote("VFX_Broadcast"):FireAllClients("Explosion", character.PrimaryPart.Position)
 end)
-
--- Register Sample Ability
-SolarisCore.RegisterAbility({
-    Name = "SolarFlare",
-    Cooldown = 5,
-    OnActivate = function(player)
-        print("🔥 SERVER: " .. player.Name .. " casted Solar Flare!")
-    end
-})
-
-print("☀️ Solaris Engine Server Online")

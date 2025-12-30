@@ -1,4 +1,4 @@
-name: Luau CI
+name: SolarisEngine CI
 
 on: [push, pull_request]
 
@@ -8,12 +8,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install Rojo
-        run: |
-          curl -L https://github.com/rojo-rbx/rojo/releases/download/v7.3.0/rojo-7.3.0-linux.zip -o rojo.zip
-          unzip rojo.zip
-          chmod +x rojo
-          sudo mv rojo /usr/local/bin/
+      - name: Install Aftman
+        uses: ok-nick/setup-aftman@v0.3.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Verify Rojo Build
-        run: rojo build -o test-build.rbxl
+        run: rojo build -o SolarisBuild.rbxl
