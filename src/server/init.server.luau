@@ -1,17 +1,23 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
-local SolarisCore = require(Shared:WaitForChild("SolarisCore"))
 
--- Simulate loading abilities
-local Fireball = {
+local SolarisCore = require(Shared:WaitForChild("SolarisCore"))
+local Network = require(Shared:WaitForChild("Network"))
+
+-- Setup Network Listener
+Network.GetRemote("RequestAbility").OnServerEvent:Connect(function(player: Player, abilityName: string)
+    -- Complex logic here: Check if player is stunned, on cooldown, etc.
+    print(player.Name .. " is attempting to use " .. abilityName)
+    SolarisCore.Execute(abilityName, player)
+end)
+
+-- Register Sample Ability
+SolarisCore.RegisterAbility({
     Name = "SolarFlare",
     Cooldown = 5,
     OnActivate = function(player)
-        print("🔥 Solaris Flare activated by " .. player.Name)
-        -- Logic for creating a projectile would go here
+        print("🔥 SERVER: " .. player.Name .. " casted Solar Flare!")
     end
-}
+})
 
-SolarisCore.RegisterAbility(Fireball)
-
-print("☀️ Solaris Engine Server Initialized")
+print("☀️ Solaris Engine Server Online")
