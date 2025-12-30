@@ -1,0 +1,12 @@
+# Roblox temporary files
+*.rbxlx.lock
+*.rbxl.lock
+
+# Rojo build artifacts
+/build/
+*.rbxm
+*.rbxmx
+
+# IDEs
+.vscode/
+.idea/
